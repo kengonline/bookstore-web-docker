@@ -1,26 +1,66 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Provider } from 'react-redux'
+import { Router } from 'react-router'
+
+// Configs
+import history from 'src/configs/router.config'
+import store from 'src/configs/store.config'
+import Config from 'src/configs/env.config'
+import 'src/configs/axios.config'
+import 'src/configs/moment.config'
+import 'src/configs/accounting.config'
+import 'src/configs/notification.config'
+
+// Services
+import { verifyUserProfile } from "src/services/security.service";
+
+// Components
+import ScrollToTop from 'src/containers/router/ScrollToTop'
+import RouterComponent from 'src/containers/router/Router'
+import LoadingScreen from "src/components/shared/loading/LoadingScreen";
+import TimeoutNotification from "src/containers/error/TimeoutNotification";
+
+// CSS
+import './App.scss'
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: true
+    }
+  }
+
+  componentWillMount() {
+    console.log(`App Version: ${Config.VERSION}`)
+  }
+
+  async componentDidMount() {
+    await verifyUserProfile();
+    this.setState({ loading: false });
+  }
+
+  renderContent = (loading) => {
+    if (loading) {
+      return <LoadingScreen />;
+    } else {
+      return <RouterComponent />;
+    }
+  }
+
   render() {
+    const { loading } = this.state;
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Provider store={store}>
+        <Router history={history}>
+          <ScrollToTop>
+            <TimeoutNotification />
+            {this.renderContent(loading)}
+          </ScrollToTop>
+        </Router>
+      </Provider>
     );
   }
 }

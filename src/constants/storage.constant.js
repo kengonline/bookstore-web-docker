@@ -1,0 +1,4 @@
+export const LOGIN_TYPE = {
+    PERMANENT: "PERMANENT",
+    TEMPORARY: "TEMPORARY"
+}
