@@ -39,8 +39,9 @@ const StyledSider = styled(Layout.Sider)`
     color: #fff;
     display: inline-block;
     vertical-align: middle;
-    font-size: 32px;
-    line-height: 60px;
+    font-size: 24px;
+    line-height: 64px;
+    font-family: Avenir,Helvetica Neue,Arial,Helvetica,sans-serif;
 }
 
 & .ant-btn.menu-button {
