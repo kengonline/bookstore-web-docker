@@ -33,26 +33,29 @@ class FeedsPage extends Component {
         this.setState({ loading: false, feeds })
     }
 
+    renderFeedCards = (feeds = []) => {
+        return feeds.map(item => (
+            <Col xs={24} md={8} key={item.id}>
+                <FeedCard
+                    id={item.id}
+                    publisherId={item.publisherId}
+                    createdBy={item.createdBy}
+                    createdDate={moment(item.createdDate)}
+                    content={item.content}
+                    url={item.url}
+                >
+                    {item.content}
+                </FeedCard>
+            </Col>
+        ))
+    }
 
     render() {
         const { feeds } = this.state;
         return (
-            <Layout {...this.props} style={{ backgroundColor: 'white' }}>
+            <Layout {...this.props}>
                 <Row gutter={16}>
-                    {feeds.map(item => (
-                        <Col span={8} key={item.id}>
-                            <FeedCard
-                                id={item.id}
-                                publisherId={item.publisherId}
-                                createdBy={item.createdBy}
-                                createdDate={moment(item.createdDate)}
-                                content={item.content}
-                                url={item.url}
-                            >
-                                {item.content}
-                            </FeedCard>
-                        </Col>
-                    ))}
+                    {this.renderFeedCards(feeds)}
                 </Row>
             </Layout>
         );
