@@ -33,7 +33,7 @@ class PopoverDateRange extends Component {
     }
 
     onChange = (dates) => {
-        this.setState({ values: dates })
+        this.setState({ values: dates }, this.handleChange);
     }
 
     renderLabel = (values = []) => {
