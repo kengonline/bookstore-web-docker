@@ -1,33 +1,32 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.error-element {
+  input, input:hover, textarea, textarea:hover, .ant-input-number, .ant-input-number:hover, .ant-select-selection,
+  input.ant-calendar-picker-input.ant-input:hover, span.ant-calendar-picker-input.ant-input, 
+  span.ant-calendar-picker-input.ant-input:hover {
+      border-color: red;
   }
-  to {
-    transform: rotate(360deg);
+
+  input.ant-calendar-range-picker-input, input.ant-calendar-range-picker-input:focus {
+      border-color: unset;
+      box-shadow: unset;
+  }
+
+  .ant-select-focused>.ant-select-selection input {
+      border: unset;
+      box-shadow: unset;
+  }
+
+  input:focus, div.ant-input-number:focus, .ant-input-number-focused, textarea:focus, .ant-select-focused>.ant-select-selection, .ant-calendar-picker>.ant-calendar-picker-input.ant-input:focus {
+      border-color: #ff4d4f;
+      outline: 0;
+      box-shadow: 0 0 0 2px rgba(245, 34, 45, 0.2);
+      border-right-width: 1px !important;
+  }
+  
+  .ant-list.ant-list-bordered {
+      border-color: red;
+
+      .ant-list-empty-text {
+          color: red;
+      }
   }
 }
