@@ -17,7 +17,7 @@ import { verifyUserProfile } from "src/services/security.service";
 // Components
 import ScrollToTop from 'src/containers/router/ScrollToTop'
 import RouterComponent from 'src/containers/router/Router'
-import LoadingScreen from "src/components/shared/loading/LoadingScreen";
+import LoadingScreen from "src/components/loading/LoadingScreen";
 import TimeoutNotification from "src/containers/error/TimeoutNotification";
 
 // CSS

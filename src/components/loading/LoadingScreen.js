@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from "styled-components";
 
 // Components
-import LoadingIcon from 'src/components/shared/loading/LoadingIcon';
+import LoadingIcon from 'src/components/loading/LoadingIcon';
 
 const StyledDiv = styled.div`
     & {
