@@ -8,7 +8,6 @@ import { redirect } from 'src/services/router.service';
 // Components
 import Sidebar from 'src/components/layout/Sidebar';
 import Header from 'src/components/layout/Header';
-import Footer from "src/components/layout/Footer";
 
 const StyledLayout = styled(Layout)`
 &.ant-layout {
@@ -70,9 +69,6 @@ class CustomLayout extends Component {
                             {this.props.children}
                         </div>
                     </Layout.Content>
-                    {/* <Footer style={{ textAlign: 'center' }}>
-                        Cheetah © All Rights Reserved.
-                    </Footer> */}
                 </HeaderLayout>
             </StyledLayout>
         )
