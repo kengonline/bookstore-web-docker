@@ -61,8 +61,9 @@ const StyledHeaderLayout = styled(Layout.Header)`
     }
 }
 
-& .menu-icon {
+& .user-icon {
     font-size: 20px;
+    margin-right: 6px;
     cursor: pointer;
 }
 `
@@ -79,10 +80,10 @@ class Header extends Component {
     renderOverlay = () => {
         return (
             <Menu>
-                <Menu.Item onClick={this.onClickUserMenu} key="account-settings">
+                <Menu.Item onClick={this.onClickUserMenu} key="wishlist">
                     <Icon type="setting" /> Wishlist
                 </Menu.Item>
-                <Menu.Item onClick={this.onClickUserMenu} key="account-settings">
+                <Menu.Item onClick={this.onClickUserMenu} key="settings">
                     <Icon type="setting" /> Settings
                 </Menu.Item>
                 <Menu.Divider />
@@ -104,7 +105,7 @@ class Header extends Component {
                     <div className="item">
                         <Dropdown overlay={this.renderOverlay()} trigger={['click']}>
                             <span className="ant-dropdown-link" href="#">
-                                <Icon type="user" theme="outlined" className="menu-icon" />
+                                <Icon type="user" theme="outlined" className="user-icon" />
                                 <span>KengOnline</span>
                             </span>
                         </Dropdown>
