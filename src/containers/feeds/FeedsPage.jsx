@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'antd';
-import moment from 'moment'
+import { List, Button } from 'antd';
+import moment from 'moment';
+import styled from 'styled-components';
 
 // Services
-import { addRouter } from 'src/services/router.service'
+import { addRouter } from 'src/services/router.service';
 
 // Components
 import Layout from 'src/components/layout/Layout';
-import FeedCard from "src/components/card/FeedCard";
+import FeedCard from "src/components/feed/FeedCard";
+import ContentBox from "src/components/layout/ContentBox";
+import LoadingScreen from "src/components/loading/LoadingScreen";
+import FeedCriteria from "src/components/feed/FeedCriteria";
 
 // Mock data
 import Feeds from 'src/mock-data/feeds.json'
-import LoadingScreen from "src/components/loading/LoadingScreen";
+
+const CriteriaBox = styled(ContentBox)`
+    & {
+        margin-bottom: 12px;
+    }
+`
+
 
 class FeedsPage extends Component {
     static configRoute() {
@@ -23,20 +33,41 @@ class FeedsPage extends Component {
     constructor(props) {
         super(props);
 
+        this.criteria = {
+            dateRange: [moment().startOf('day').subtract(7, 'day'), moment()]
+        }
+
         this.state = {
-            loading: true,
+            initLoading: true,
+            fetching: false,
             feeds: []
         }
     }
 
     async componentDidMount() {
         await new Promise(reslove => setTimeout(reslove, 1000))
-        this.setState({ loading: false, feeds: Feeds })
+        this.setState({ initLoading: false, feeds: Feeds })
     }
 
-    renderFeedCards = (feeds = []) => {
-        return feeds.map(item => (
-            <Col xs={24} md={8} key={item.id}>
+    onCriteriaChange = (criteria) => {
+        console.log(criteria)
+        this.criteria = criteria;
+    }
+
+    onLoadMore = async () => {
+        this.setState({ fetching: true })
+
+        const result = await this.fetchMore(3)
+
+        this.setState({
+            fetching: false,
+            feeds: [...this.state.feeds, ...result]
+        })
+    }
+
+    renderFeedCards = (item) => {
+        return (
+            <List.Item>
                 <FeedCard
                     id={item.id}
                     publisherId={item.publisherId}
@@ -47,14 +78,41 @@ class FeedsPage extends Component {
                 >
                     {item.content}
                 </FeedCard>
-            </Col>
-        ))
+            </List.Item>
+        )
+    }
+
+    renderLoadMore = (disabled) => {
+        return (
+            <div style={{ textAlign: 'center' }}>
+                <Button onClick={this.onLoadMore} disabled={disabled}>loading more</Button>
+            </div>
+        )
+    }
+
+    fetchMore = async (count) => {
+        let list = [];
+
+        await new Promise(reslove => setTimeout(reslove, 1000))
+        for (let index = 0; index < count; index++) {
+            list.push({
+                id: this.state.feeds.length + index,
+                publisherId: this.state.feeds.length + index,
+                createdBy: `Load more ${this.state.feeds.length + index}`,
+                createdDate: moment(),
+                content: "หนังสือออกใหม่ประจำวันที่ 01/01/2019\n1.XXX เล่ม 1\n2.XXX เล่ม 2\n3.XXX เล่ม 3\n4.XXX เล่ม 4\n5.XXX เล่ม 5",
+                source: "Facebook",
+                url: "https://ant.design/components/card/"
+            })
+        }
+
+        return list;
     }
 
     render() {
-        const { loading, feeds } = this.state;
+        const { initLoading, fetching, feeds } = this.state;
 
-        if (loading) {
+        if (initLoading) {
             return (
                 <Layout {...this.props}>
                     <LoadingScreen />
@@ -64,9 +122,17 @@ class FeedsPage extends Component {
 
         return (
             <Layout {...this.props}>
-                <Row gutter={16}>
-                    {this.renderFeedCards(feeds)}
-                </Row>
+                <CriteriaBox>
+                    <FeedCriteria defaultValue={this.criteria} onChange={this.onCriteriaChange} />
+                </CriteriaBox>
+
+                <List
+                    loading={fetching}
+                    loadMore={this.renderLoadMore(fetching)}
+                    grid={{ gutter: 16, xs: 1, md: 3 }}
+                    dataSource={feeds}
+                    renderItem={this.renderFeedCards}
+                />
             </Layout>
         );
     }
