@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { List, Button } from 'antd';
 import moment from 'moment';
 import styled from 'styled-components';
 
@@ -8,12 +7,10 @@ import { addRouter } from 'src/services/router.service';
 
 // Components
 import Layout from 'src/components/layout/Layout';
-import FeedCard from "src/components/feed/FeedCard";
 import ContentBox from "src/components/layout/ContentBox";
 import LoadingScreen from "src/components/loading/LoadingScreen";
 import FeedCriteria from "src/components/feed/FeedCriteria";
-import BaseCard from "src/components/card/BaseCard";
-import LoadingIcon from "src/components/loading/LoadingIcon";
+import FeedListWithLoadMore from "src/components/feed/FeedListWithLoadMore";
 
 // Mock data
 import Feeds from 'src/mock-data/feeds.json'
@@ -40,15 +37,14 @@ class FeedsPage extends Component {
         }
 
         this.state = {
-            initLoading: true,
-            fetching: false,
+            fetchingFeeds: true,
             feeds: []
         }
     }
 
     async componentDidMount() {
         await new Promise(reslove => setTimeout(reslove, 1000))
-        this.setState({ initLoading: false, feeds: Feeds })
+        this.setState({ fetchingFeeds: false, feeds: Feeds })
     }
 
     onCriteriaChange = (criteria) => {
@@ -57,54 +53,9 @@ class FeedsPage extends Component {
     }
 
     onLoadMore = async () => {
-        const { feeds } = this.state;
-
-        this.setState({
-            fetching: true,
-            feeds: [...feeds, { loading: true }]
-        });
-
         const result = await this.fetchMore(3)
 
-        this.setState({
-            fetching: false,
-            feeds: [...feeds, ...result]
-        })
-    }
-
-    renderFeedCards = (item) => {
-        if (item.loading) {
-            return (
-                <List.Item>
-                    <BaseCard bordered={false} style={{ textAlign: 'center', height: 185 }}>
-                        <LoadingIcon size={60} style={{ paddingTop: 30, paddingBottom: 30 }} />
-                    </BaseCard>
-                </List.Item>
-            )
-        }
-
-        return (
-            <List.Item>
-                <FeedCard
-                    id={item.id}
-                    publisherId={item.publisherId}
-                    createdBy={item.createdBy}
-                    createdDate={moment(item.createdDate)}
-                    content={item.content}
-                    url={item.url}
-                >
-                    {item.content}
-                </FeedCard>
-            </List.Item>
-        )
-    }
-
-    renderLoadMore = (disabled) => {
-        return (
-            <div style={{ textAlign: 'center' }}>
-                <Button onClick={this.onLoadMore} disabled={disabled}>loading more</Button>
-            </div>
-        )
+        this.setState({ feeds: [...this.state.feeds, ...result] });
     }
 
     fetchMore = async (count) => {
@@ -127,9 +78,9 @@ class FeedsPage extends Component {
     }
 
     render() {
-        const { initLoading, fetching, feeds } = this.state;
+        const { fetchingFeeds, feeds } = this.state;
 
-        if (initLoading) {
+        if (fetchingFeeds) {
             return (
                 <Layout {...this.props}>
                     <LoadingScreen />
@@ -143,11 +94,9 @@ class FeedsPage extends Component {
                     <FeedCriteria defaultValue={this.criteria} onChange={this.onCriteriaChange} />
                 </CriteriaBox>
 
-                <List
-                    loadMore={this.renderLoadMore(fetching)}
-                    grid={{ gutter: 16, xs: 1, md: 3 }}
+                <FeedListWithLoadMore
+                    onLoadMore={this.onLoadMore}
                     dataSource={feeds}
-                    renderItem={this.renderFeedCards}
                 />
             </Layout>
         );
