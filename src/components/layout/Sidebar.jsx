@@ -179,7 +179,7 @@ class Sidebar extends Component {
 
                         <Menu.SubMenu
                             key="/management"
-                            title={<span><Icon type="right-square" theme="outlined" />Management</span>}
+                            title={<span><Icon type="right-square" theme="outlined" /><span>Management</span></span>}
                         >
                             <Menu.Item key="/management/book">Book Management</Menu.Item>
                             <Menu.Item key="/management/publisher">Publisher Management</Menu.Item>
