@@ -138,10 +138,6 @@ export const wrapValidateClass = (element, basedClass = '') => {
     return errors.length && dirty ? `${basedClass} error-element` : basedClass;
 }
 
-export const getCssClassTitle = (basedClass, isRequire) => {
-    return isRequire ? `${basedClass} form-title ant-form-item-required required-field` : `${basedClass} form-title`;
-}
-
 export const isFormDisabled = (disabled, disabledField) => {
     return disabled || disabledField;
 }
