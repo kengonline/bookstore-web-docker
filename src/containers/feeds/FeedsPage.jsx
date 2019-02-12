@@ -12,6 +12,8 @@ import FeedCard from "src/components/feed/FeedCard";
 import ContentBox from "src/components/layout/ContentBox";
 import LoadingScreen from "src/components/loading/LoadingScreen";
 import FeedCriteria from "src/components/feed/FeedCriteria";
+import BaseCard from "src/components/card/BaseCard";
+import LoadingIcon from "src/components/loading/LoadingIcon";
 
 // Mock data
 import Feeds from 'src/mock-data/feeds.json'
@@ -55,17 +57,32 @@ class FeedsPage extends Component {
     }
 
     onLoadMore = async () => {
-        this.setState({ fetching: true })
+        const { feeds } = this.state;
+
+        this.setState({
+            fetching: true,
+            feeds: [...feeds, { loading: true }]
+        });
 
         const result = await this.fetchMore(3)
 
         this.setState({
             fetching: false,
-            feeds: [...this.state.feeds, ...result]
+            feeds: [...feeds, ...result]
         })
     }
 
     renderFeedCards = (item) => {
+        if (item.loading) {
+            return (
+                <List.Item>
+                    <BaseCard bordered={false} style={{ textAlign: 'center', height: 185 }}>
+                        <LoadingIcon size={60} style={{ paddingTop: 30, paddingBottom: 30 }} />
+                    </BaseCard>
+                </List.Item>
+            )
+        }
+
         return (
             <List.Item>
                 <FeedCard
@@ -93,7 +110,7 @@ class FeedsPage extends Component {
     fetchMore = async (count) => {
         let list = [];
 
-        await new Promise(reslove => setTimeout(reslove, 1000))
+        await new Promise(reslove => setTimeout(reslove, 3000))
         for (let index = 0; index < count; index++) {
             list.push({
                 id: this.state.feeds.length + index,
@@ -127,7 +144,6 @@ class FeedsPage extends Component {
                 </CriteriaBox>
 
                 <List
-                    loading={fetching}
                     loadMore={this.renderLoadMore(fetching)}
                     grid={{ gutter: 16, xs: 1, md: 3 }}
                     dataSource={feeds}
