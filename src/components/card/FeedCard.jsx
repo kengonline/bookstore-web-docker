@@ -6,6 +6,7 @@ import { Menu, Dropdown, Icon } from "antd";
 
 // Components
 import BaseCard from "src/components/card/BaseCard";
+import RelativeTime from "src/components/date-time/RelativeTime";
 
 const propTypes = {
     id: PropTypes.number.isRequired,
@@ -24,6 +25,13 @@ const MoreIcon = styled(Icon)`
     }
 `
 
+const StyledRelativeTime = styled(RelativeTime)`
+    &.relative-time {
+        font-size: 12px;
+        color: #a0a0a0;
+    }
+`
+
 const menu = (url) => (
     <Menu onClick={() => window.open(url, '_blank')}>
         <Menu.Item key={url}>
@@ -35,7 +43,12 @@ const menu = (url) => (
 const FeedCard = props => {
     return (
         <BaseCard
-            title={props.createdBy}
+            title={(
+                <div>
+                    <div>{props.createdBy}</div>
+                    <StyledRelativeTime value={props.createdDate} />
+                </div>
+            )}
             bordered={false}
             extra={(
                 <Dropdown overlay={() => menu(props.url)} trigger={['click']}>
