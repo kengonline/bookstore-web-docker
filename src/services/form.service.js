@@ -7,7 +7,7 @@ import moment from 'moment';
 import { VALIDATION } from 'src/constants/form.constant';
 
 // Components
-import ErrorMessages from 'src/components/shared/custom-form/ErrorMessages';
+import ErrorMessages from "src/components/form/ErrorMessages";
 
 export const normalizeField = (value) => {
     if (_.isString(value)) {
