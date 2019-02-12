@@ -11,6 +11,7 @@ import FeedCard from "src/components/card/FeedCard";
 
 // Mock data
 import Feeds from 'src/mock-data/feeds.json'
+import LoadingScreen from "src/components/loading/LoadingScreen";
 
 class FeedsPage extends Component {
     static configRoute() {
@@ -29,8 +30,8 @@ class FeedsPage extends Component {
     }
 
     async componentDidMount() {
-        const feeds = await Feeds
-        this.setState({ loading: false, feeds })
+        await new Promise(reslove => setTimeout(reslove, 1000))
+        this.setState({ loading: false, feeds: Feeds })
     }
 
     renderFeedCards = (feeds = []) => {
@@ -51,7 +52,16 @@ class FeedsPage extends Component {
     }
 
     render() {
-        const { feeds } = this.state;
+        const { loading, feeds } = this.state;
+
+        if (loading) {
+            return (
+                <Layout {...this.props}>
+                    <LoadingScreen />
+                </Layout>
+            )
+        }
+
         return (
             <Layout {...this.props}>
                 <Row gutter={16}>
