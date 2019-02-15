@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from "antd";
 import styled from 'styled-components';
 import MomentPropTypes from 'react-moment-proptypes';
@@ -13,26 +13,25 @@ const propTypes = {
     value: MomentPropTypes.momentObj.isRequired,
 };
 
-class RelativeTime extends Component {
-    componentDidMount() {
-        this.interval = setInterval(() => this.setState({}), 60000);
-    }
+const RelativeTime = ({ className, value }) => {
+    const setState = useState()[1]
 
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
+    useEffect(() => {
+        const interval = setInterval(() => setState({}), 60000);
 
-    render() {
-        const { className, value } = this.props;
+        return function cleanup() {
+            clearInterval(interval);
+        }
+    })
 
-        return (
-            <div className={`relative-time ${className}`}>
-                <ClockIcon key="icon" type="clock-circle" className="icon" />
-                <span key="time" className="label">{value.fromNow()}</span>
-            </div>
-        );
-    }
-}
+    return (
+        <div className={`relative-time ${className}`}>
+            <ClockIcon key="icon" type="clock-circle" className="icon" />
+            <span key="time" className="label">{value.fromNow()}</span>
+        </div>
+    );
+};
+
 
 RelativeTime.propTypes = propTypes
 
