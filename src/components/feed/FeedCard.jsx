@@ -44,10 +44,10 @@ const FeedCard = props => {
     return (
         <BaseCard
             title={(
-                <div>
+                <React.Fragment>
                     <div>{props.createdBy}</div>
                     <StyledRelativeTime value={props.createdDate} />
-                </div>
+                </React.Fragment>
             )}
             bordered={false}
             extra={(
