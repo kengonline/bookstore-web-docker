@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { List, Button } from "antd";
 import moment from 'moment';
@@ -39,59 +39,48 @@ const LoadMoreRow = styled.div`
     }
 `
 
-class FeedListWithLoadMore extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            fetching: false
-        }
-    }
-
-    onLoadMore = async () => {
-        this.setState({ fetching: true });
-
-        await this.props.onLoadMore();
-
-        this.setState({ fetching: false });
-    }
-
-    renderFeedCards = (item) => {
-        if (item.loading) {
-            return (
-                <List.Item>
-                    <LoadingCard bordered={false}>
-                        <LoadingIcon size={60} />
-                    </LoadingCard>
-                </List.Item>
-            )
-        }
-
+const renderFeedCards = (item) => {
+    if (item.loading) {
         return (
             <List.Item>
-                <FeedCard
-                    id={item.id}
-                    publisherId={item.publisherId}
-                    createdBy={item.createdBy}
-                    createdDate={moment(item.createdDate)}
-                    content={item.content}
-                    url={item.url}
-                >
-                    {item.content}
-                </FeedCard>
+                <LoadingCard bordered={false}>
+                    <LoadingIcon size={60} />
+                </LoadingCard>
             </List.Item>
         )
     }
 
-    renderLoadMore = (disabled) => {
-        return (
-            <LoadMoreRow>
-                <Button onClick={this.onLoadMore} disabled={disabled}>Load more</Button>
-            </LoadMoreRow>
-        )
-    }
+    return (
+        <List.Item>
+            <FeedCard
+                id={item.id}
+                publisherId={item.publisherId}
+                createdBy={item.createdBy}
+                createdDate={moment(item.createdDate)}
+                content={item.content}
+                url={item.url}
+            >
+                {item.content}
+            </FeedCard>
+        </List.Item>
+    )
+}
 
-    mergeDataSource = (dataSource, fetching) => {
+const LoadMore = ({ onClick, disabled }) => (
+    <LoadMoreRow>
+        <Button
+            onClick={onClick}
+            disabled={disabled}
+        >
+            Load more
+        </Button>
+    </LoadMoreRow>
+)
+
+const FeedListWithLoadMore = ({ dataSource, onLoadMore }) => {
+    const [fetching, setFetching] = useState(false)
+
+    const mergeDataSource = (dataSource, fetching) => {
         if (fetching === false) {
             return dataSource
         }
@@ -99,20 +88,21 @@ class FeedListWithLoadMore extends Component {
         return [...dataSource, { loading: true }]
     }
 
-    render() {
-        const { dataSource } = this.props;
-        const { fetching } = this.state;
-
-        return (
-            <List
-                loadMore={this.renderLoadMore(fetching)}
-                grid={{ gutter: 16, xs: 1, md: 3 }}
-                dataSource={this.mergeDataSource(dataSource, fetching)}
-                renderItem={this.renderFeedCards}
-            />
-        );
+    const onClickLoadMore = async () => {
+        setFetching(true);
+        await onLoadMore();
+        setFetching(false);
     }
-}
+
+    return (
+        <List
+            loadMore={<LoadMore onClick={onClickLoadMore} disabled={fetching} />}
+            grid={{ gutter: 16, xs: 1, md: 3 }}
+            dataSource={mergeDataSource(dataSource, fetching)}
+            renderItem={renderFeedCards}
+        />
+    );
+};
 
 FeedListWithLoadMore.propTypes = propTypes;
 FeedListWithLoadMore.defaultProps = defaultProps;
