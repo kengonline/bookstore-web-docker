@@ -101,7 +101,7 @@ const propTypes = {
 }
 
 const defaultProps = {
-    defaultMenu: ['/dashboard'],
+    defaultMenu: ['/feeds'],
     onClick: () => { },
     onCollapseChange: () => { }
 }
