@@ -37,8 +37,16 @@ class App extends Component {
   }
 
   async componentDidMount() {
+    this.isMount = true;
     await verifyUserProfile();
-    this.setState({ loading: false });
+
+    if (this.isMount) {
+      this.setState({ loading: false });
+    }
+  }
+
+  componentWillUnmount() {
+    this.isMount = false;
   }
 
   renderContent = (loading) => {

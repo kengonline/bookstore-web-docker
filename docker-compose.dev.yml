@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  bookstore-web:
+    image: kengonline/bookstore-web
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    # environment:
+    #   NODE_ENV: production
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules/
+  tests:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules/
+    command: npm test

@@ -28,9 +28,9 @@
     "universal-cookie": "^3.0.7"
   },
   "scripts": {
-    "start": "cross-env NODE_PATH=src/.. react-scripts start",
-    "build": "cross-env NODE_PATH=src/.. react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --watch",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -42,7 +42,5 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "devDependencies": {
-    "cross-env": "^5.2.0"
-  }
+  "devDependencies": {}
 }
