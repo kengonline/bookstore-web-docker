@@ -7,3 +7,16 @@ before_install:
 
 script:
   - docker run kengonline/bookstore-web-docker npm test -- --coverage
+
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-southeast-1"
+  app: bookstore-web-docker
+  env: "BookstoreWebDocker-env"
+  bucket_name: "elasticbeanstalk-ap-southeast-1-179397784370"
+  bucket_path: "bookstore-web-docker"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: 
+    secure: "$AWS_SECRET_KEY"
